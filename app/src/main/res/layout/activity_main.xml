@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".Main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <ImageView
+            android:id="@+id/imageViewBicycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="ImageView_onClick"
+            app:srcCompat="@drawable/imageedit_6_8018017515" />
+
+        <TextView
+            android:id="@+id/textViewWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="62dp"
+            android:text="Welcome"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/background_light"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="98dp"
+            tools:layout_editor_absoluteY="72dp" />
+
+        <!--<Button-->
+        <!--android:id="@+id/buttonStation"-->
+        <!--style="@android:style/Widget.Material.Light.Button.ButtonBar.AlertDialog"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="74dp"-->
+        <!--android:onClick= "buttonStation_onClick"-->
+        <!--android:text="Find a bike station " />-->
+
+        <!--<Button-->
+        <!--android:id="@+id/buttonRoute"-->
+        <!--style="@android:style/Widget.Material.Light.Button.ButtonBar.AlertDialog"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:onClick="buttonRoute_onClick"-->
+        <!--android:text="Find your route " />-->
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

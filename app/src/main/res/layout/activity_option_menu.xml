@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OptionMenu">
+
+    <RelativeLayout
+
+        android:layout_width="345dp"
+        android:layout_height="594dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="24dp">
+
+
+        <CheckBox
+            android:id="@+id/checkBox_restaurant"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/checkBox_shopping"
+            android:drawablePadding="30dp"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:text="Restaurants and Cafe"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="153dp"
+            android:layout_marginLeft="10dp"/>
+
+
+
+        <CheckBox
+            android:id="@+id/checkBox_bar"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox_restaurant"
+            android:text="Bars"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="30dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="153dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox_movie"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox_Museums"
+            android:text="Movie Theaters"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="30dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="153dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox_shopping"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/checkBox_movie"
+            android:text="Shopping Malls"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="30dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="200dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox_Museums"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="123dp"
+            android:text="Museums and Art Galleries"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="30dp"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="251dp" />
+
+        <Button
+            android:id="@+id/button_start"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="235dp"
+            android:layout_height="66dp"
+            android:layout_alignEnd="@+id/checkBox_Museums"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="@color/colorGreen"
+            android:onClick="Start_Clicked"
+            android:text="Start"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="30sp"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="131dp"
+            tools:layout_editor_absoluteY="363dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="210dp"
+            android:layout_height="49dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="51dp"
+            android:text="Choose your route!"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="22sp"
+            android:textStyle="italic"
+            android:layout_marginLeft="10dp"
+            />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
