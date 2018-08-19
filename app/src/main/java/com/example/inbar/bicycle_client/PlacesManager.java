@@ -33,21 +33,26 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class PlacesManager {
 
     private String Key = "AIzaSyAK4YCms8YltWWh_beAVXDylQw-GCW55_s";
-    URIBuilder builder = new URIBuilder().setScheme("https").setHost("maps.googleapis.com").setPath("/maps/api/place/nearbysearch/json");
+    URIBuilder builder;
     HttpClient client = new DefaultHttpClient();
     ArrayList<Place> resultList;
 
 
     public ArrayList<Place> LoadLocations(String types, double lng, double lat, GoogleMap mMap, LatLng stationPosition1) throws ParseException, IOException, URISyntaxException, ExecutionException, InterruptedException {
 
-        builder.addParameter("location", lat + "," + lng);
-        builder.addParameter("radius", "3000");
-        builder.addParameter("rating", "4");
-        builder.addParameter("opennow", "true");
-        builder.addParameter("types", types);
-        builder.addParameter("key", this.Key);
+        resultList = new ArrayList();
+        String [] allTypes = types.split(",");
+        for ( String type: allTypes) {
+            builder = new URIBuilder().setScheme("https").setHost("maps.googleapis.com").setPath("/maps/api/place/nearbysearch/json");
+            builder.addParameter("location", lat + "," + lng);
+            builder.addParameter("radius", "3000");
+            builder.addParameter("rating", "4");
+            builder.addParameter("opennow", "true");
+            builder.addParameter("types", type);
+            builder.addParameter("key", this.Key);
 
-        String status = new PlacesManagerHttpHendler().execute().get();
+            String status = new PlacesManagerHttpHendler().execute().get();
+        }
         Collections.sort(resultList,Place::compareTo);
         ChoosePlacesForTheUserRoute(resultList,lat,lng,mMap, stationPosition1);
         return resultList;
@@ -87,7 +92,6 @@ public class PlacesManager {
                     JSONObject jsonObj = new JSONObject(retSrc);
                     JSONArray predsJsonArray = jsonObj.getJSONArray("results");
 
-                    resultList = new ArrayList<Place>(predsJsonArray.length());
                     for (int i = 0; i < predsJsonArray.length(); i++) {
                         Place place = new Place();
                         place.rating = predsJsonArray.getJSONObject(i).getDouble("rating");

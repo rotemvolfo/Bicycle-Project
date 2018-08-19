@@ -42,7 +42,7 @@ public class OptionMenu extends AppCompatActivity {
 
         checkBox = (CheckBox) findViewById(R.id.checkBox_shopping);
         if(checkBox.isChecked()){
-            userOptions += "shopping_mall";
+            userOptions += "shopping_mall,clothing_store";
         }
 
 
