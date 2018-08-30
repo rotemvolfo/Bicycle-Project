@@ -114,6 +114,7 @@ public class DirectionsRequests extends AsyncTask<String, Object, String> {
         _builder.addParameter("origin",_Userlat + "," + _Userlng);
         _builder.addParameter("destination",_resultList.get(indexArr[0]).lat+","+_resultList.get(indexArr[0]).lng);// the destination is the most souhe Place
         _builder.addParameter("mode", "WALKING");
+        _builder.addParameter("waypoints",_resultList.get(0).name);
        _builder.addParameter("optimize","true");
        double x=_stationPosition1.latitude;
        //_builder.addParameter("via",_stationPosition1.latitude+","+_stationPosition1.longitude);

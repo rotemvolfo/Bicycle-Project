@@ -150,6 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng yourLocation = new LatLng( userLocation.getLatitude(),userLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(yourLocation).title("Your Location"));
 
+
         for (Place place: placesArrayList) {//present places  icons on the map
             LatLng position = new LatLng(place.lat,place.lng );
             mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));

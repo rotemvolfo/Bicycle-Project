@@ -15,16 +15,9 @@ public class Main extends AppCompatActivity {
 
         }
 
-    public void ImageView_onClick(View view) {
+    public void buttonStart_onClick(View view) {
         Intent intent = new Intent(this, OptionMenu.class);//// here load the layer on map of the locations ( tel ofan)
         startActivity(intent);
     }
 
-    public void buttonStation_onClick(View view) {
-        
-    }
-
-    public void buttonRoute_onClick(View view) {
-
-    }
 }
