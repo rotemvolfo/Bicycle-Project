@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.inbar.bicycle_client">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -42,13 +43,15 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".StationsActivity" />
         <activity android:name=".locationActivity" />
-
-
         <activity
             android:name=".MenuItem"
             android:label="@string/title_activity_menu_item"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".OptionMenu"></activity>
+        <activity android:name=".OptionMenu" />
+        <activity
+            android:name=".NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

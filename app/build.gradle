@@ -47,7 +47,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.google.android.gms:play-services-ads:15.0.1'
-   implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.android.support:design:27.1.1'
 
     //implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.3.0'
 }
