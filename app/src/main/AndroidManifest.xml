@@ -42,11 +42,6 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".StationsActivity" />
-        <activity android:name=".locationActivity" />
-        <activity
-            android:name=".MenuItem"
-            android:label="@string/title_activity_menu_item"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".OptionMenu" />
     </application>
 

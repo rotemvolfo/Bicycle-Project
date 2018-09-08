@@ -14,7 +14,5 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="title_activity_menu_item">MenuItem</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
 
 </resources>
