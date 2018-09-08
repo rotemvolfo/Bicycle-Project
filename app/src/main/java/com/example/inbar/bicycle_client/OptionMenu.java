@@ -48,6 +48,7 @@ public class OptionMenu extends AppCompatActivity {
 
         Intent intent = new Intent(this, MapsActivity.class);//// here load the layer on map of the locations ( tel ofan)
         intent.putExtra("userOptions", userOptions);
+        finish();
         startActivity(intent);
     }
 }

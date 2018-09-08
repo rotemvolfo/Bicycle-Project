@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/drawer_layout"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:fitsSystemWindows="true" tools:openDrawer="start">
+    android:fitsSystemWindows="true" tools:openDrawer="start" >
 
     <fragment
         android:id="@+id/map"
@@ -26,19 +26,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="@android:color/holo_blue_dark"
+                app:navigationIcon="@drawable/menu"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <ImageButton
-                android:id="@+id/toolbar_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/menu"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="left"
-                android:onClick="buttonOpenMenu_onClick"/>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
@@ -47,7 +39,7 @@
             android:id="@+id/fabBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:src="@drawable/ic_menu_camera"
             app:borderWidth="0dp" />
 
@@ -58,7 +50,7 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_navigation"
         app:menu="@menu/activity_navigation_drawer" >

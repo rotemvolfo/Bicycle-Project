@@ -2,30 +2,24 @@ package com.example.inbar.bicycle_client;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,6 +43,9 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
     private LocationListener locationListener;
     private StationsActivity stationsActivity;
     private  PlacesManager placesManager;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView nv;
+    private List<SpecificStation> stationsList = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -60,7 +57,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
 
         mapFragment.getMapAsync(this);
         stationsActivity = new StationsActivity();
-        NavigationActivity navigationActivity = new NavigationActivity();
+        initNavigation();
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -124,22 +121,17 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         LatLng stationPosition1=null;
         String detailsStation="";
 
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         //get user location from gps
-        Location userLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        List<SpecificStation> stationsList = new ArrayList<>();
-        placesManager = new PlacesManager();
+        Location userLocation = getCurrentLocationOfUser();
+         placesManager = new PlacesManager();
 
         try { //   retern the Tel Ofan stastion
             stationsList = stationsActivity.getStationsList(Double.toString(userLocation.getLongitude()),Double.toString(userLocation.getLatitude()));
+
             if(stationsList!= null && stationsList.size() != 0) {
 
                  stationPosition1 = new LatLng(stationsList.get(0).getLatitude(), stationsList.get(0).getLongitude());
-                 detailsStation = String.format("Address: %s, Bicycles Available: %s, Available Docks: %s", stationsList.get(0).getAddress(), stationsList.get(0).getNumOfBicyclesAvailable(), stationsList.get(0).getNumOfPolesAvailable());
+                 detailsStation = String.format("Address: %s, Bicycles Available: %s", stationsList.get(0).getAddress(),stationsList.get(0).getNumOfBicyclesAvailable());
 
             }
 
@@ -189,9 +181,85 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
     }
 
     public void buttonOpenMenu_onClick(View view) {
-//        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_view);
-//        mDrawerLayout.openDrawer(mDrawerLayout);
 
-
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.openDrawer(GravityCompat.START);
     }
+
+    //function that get user location from gps
+    private Location getCurrentLocationOfUser(){
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return null;
+        }
+        Location userLocation = locationManager.getLastKnownLocation(locationProvider);
+        return userLocation;
+    }
+
+    private void initNavigation() {
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        nv = (NavigationView)findViewById(R.id.nav_view);
+        nv.setNavigationItemSelectedListener(navSelectListener);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                myToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close){
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+    }
+
+    private void markTelOfunStationByCurrentLocationOnMap(boolean isToReturn) throws ExecutionException, InterruptedException{
+
+        Location userLocation = getCurrentLocationOfUser();
+        stationsList = stationsActivity.getStationsList(Double.toString(userLocation.getLongitude()),Double.toString(userLocation.getLatitude()));
+        LatLng stationPosition1 = new LatLng(stationsList.get(0).getLatitude(), stationsList.get(0).getLongitude());
+        String detailsStation;
+        if(isToReturn)
+            detailsStation = String.format("Address: %s, Available Docks: %s", stationsList.get(0).getAddress(), stationsList.get(0).getNumOfPolesAvailable());
+       else
+            detailsStation = String.format("Address: %s, Bicycles Available: %s", stationsList.get(0).getAddress(), stationsList.get(0).getNumOfBicyclesAvailable());
+
+        mMap.addMarker(new MarkerOptions().position(stationPosition1).title(stationsList.get(0).getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.bi)).snippet(detailsStation));
+    }
+
+    private final NavigationView.OnNavigationItemSelectedListener navSelectListener = new NavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            String selectedItem = (String) item.getTitle();
+            item.setChecked(true);
+            mDrawerLayout.closeDrawer(nv);
+            try {
+                if (selectedItem.equals("Find a bike"))
+                    markTelOfunStationByCurrentLocationOnMap(false);
+                else if (selectedItem.equals("Return the bike")) {
+                    markTelOfunStationByCurrentLocationOnMap(true);
+                } else if (selectedItem.equals("Find a new route")) {
+                    startActivity(new Intent(MapsActivity.this, OptionMenu.class));
+                    mDrawerLayout.closeDrawers();
+                    finish();
+                    return true;
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            item.setChecked(true);
+            mDrawerLayout.closeDrawer(nv);
+            return true;
+        }
+    };
 }
