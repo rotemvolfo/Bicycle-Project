@@ -24,10 +24,14 @@ public class OptionMenu extends AppCompatActivity {
         if(checkBox.isChecked()){
             userOptions += "museum,art_gallery,";
         }
+          checkBox = (CheckBox) findViewById(R.id.checkBox_Museums);
+        if(checkBox.isChecked()){
+            userOptions += "Spa,";
+        }
 
         checkBox = (CheckBox) findViewById(R.id.checkBox_restaurant);
         if(checkBox.isChecked()){
-            userOptions += "restaurant,cafe,";
+            userOptions += "restaurant,";
         }
 
         checkBox = (CheckBox) findViewById(R.id.checkBox_bar);
@@ -42,7 +46,7 @@ public class OptionMenu extends AppCompatActivity {
 
         checkBox = (CheckBox) findViewById(R.id.checkBox_shopping);
         if(checkBox.isChecked()){
-            userOptions += "shopping_mall,clothing_store";
+            userOptions += "shopping_mall,";
         }
 
 
@@ -50,5 +54,13 @@ public class OptionMenu extends AppCompatActivity {
         intent.putExtra("userOptions", userOptions);
         finish();
         startActivity(intent);
+    }
+
+    public void Previous_track_clicked(View view) {
+
+
+
+
+
     }
 }
