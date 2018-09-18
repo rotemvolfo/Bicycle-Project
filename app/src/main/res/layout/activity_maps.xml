@@ -35,14 +35,6 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu_camera"
-            app:borderWidth="0dp" />
-
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -58,7 +50,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="invisible">
 
         </LinearLayout>
 
