@@ -125,7 +125,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         Location userLocation = getCurrentLocationOfUser();
          placesManager = new PlacesManager();
 
-        try { //   retern the Tel Ofan stastion
+        try { //   return the Tel Ofan stastion
             stationsList = stationsActivity.getStationsList(Double.toString(userLocation.getLongitude()),Double.toString(userLocation.getLatitude()));
 
             if(stationsList!= null && stationsList.size() != 0) {
@@ -138,7 +138,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
             ArrayList<Place> placesArrayList = placesManager.LoadLocations(getIntent().getStringExtra("userOptions"),userLocation.getLongitude(),userLocation.getLatitude(),mMap,stationPosition1);
 
 
-        // show the stations on the map
+        // show the tel ofan stations on the map
         mMap.addMarker(new MarkerOptions().position(stationPosition1).title(stationsList.get(0).getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.bi)).snippet(detailsStation));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stationPosition1));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
@@ -149,7 +149,13 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
 
         for (Place place: placesArrayList) {//present places  icons on the map
             LatLng position = new LatLng(place.lat,place.lng );
-            mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            if(place.isInWayPoint==true){
+                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE
+                )));
+
+            }else {
+                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
         }
 
         mMap.setOnInfoWindowClickListener(this);
