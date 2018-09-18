@@ -1,15 +1,23 @@
 package com.example.inbar.bicycle_client;
+import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-
+import java.io.FileOutputStream;
 import com.example.inbar.bicycle_client.Place;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import org.json.*;
+import android.content.Context;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -29,20 +37,25 @@ import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
 import cz.msebera.android.httpclient.client.utils.URIBuilder;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
-
-public class PlacesManager {
+///rotem
+public class PlacesManager extends Application {
 
     private String Key = "AIzaSyAK4YCms8YltWWh_beAVXDylQw-GCW55_s";
     URIBuilder builder;
     HttpClient client = new DefaultHttpClient();
     ArrayList<Place> resultList;
+    public static Context context;
 
 
+    @Override public void onCreate() {
+        super.onCreate();
+        context = getApplicationContext();
+    }
     public ArrayList<Place> LoadLocations(String types, double lng, double lat, GoogleMap mMap, LatLng stationPosition1) throws ParseException, IOException, URISyntaxException, ExecutionException, InterruptedException {
 
         resultList = new ArrayList();
         String [] allTypes = types.split(",");
-        for ( String type: allTypes) {
+        for ( String type: allTypes) {// google api allow one one type in each request
             builder = new URIBuilder().setScheme("https").setHost("maps.googleapis.com").setPath("/maps/api/place/nearbysearch/json");
             builder.addParameter("location", lat + "," + lng);
             builder.addParameter("radius", "3000");
@@ -53,9 +66,30 @@ public class PlacesManager {
 
             String status = new PlacesManagerHttpHendler().execute().get();
         }
+
         Collections.sort(resultList,Place::compareTo);
+
         ChoosePlacesForTheUserRoute(resultList,lat,lng,mMap, stationPosition1);
+        //SavePlacesListInFile();
         return resultList;
+    }
+
+    public void SavePlacesListInFile() throws IOException {
+
+
+        FilesService file=new FilesService();
+        file.buttonSave();
+
+
+
+/*        FileWriter FileWriter = new FileWriter(File, false); // true to append
+        // false to overwrite.
+        for (Place place:resultList)
+        {
+            FileWriter.write(place.toString());//overwrite the toString function
+
+        }*/
+
     }
 
     private void ChoosePlacesForTheUserRoute(ArrayList<Place> resultList, double lat, double lng, GoogleMap mMap, LatLng stationPosition1) throws ExecutionException, InterruptedException {
@@ -106,6 +140,7 @@ public class PlacesManager {
                         resultList.add(place);
                     }
                 }
+
 
             } catch (IOException e) {
                 e.printStackTrace();
