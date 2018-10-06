@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// parse the json with the directions that return fro the call to google Api
+//paint the route on the map
+//use also the data parser class
 public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
 

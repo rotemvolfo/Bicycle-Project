@@ -10,48 +10,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
+
+//All the utils functions that load and save data off the app
 public class FilesService {
 
     public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/aaTutorial";
 
 
-     FilesService() {
 
-
+    public void SaveRoutes( String routesStr)
+    {
         File dir = new File(path);
         dir.mkdirs();
-
+        File file = new File (path + "/savedRoute.txt");
+        SaveRoutesHelper (file, routesStr);
+        //String data[]=Load(file);
     }
-
-    public void buttonSave ( )
-    {
-        File file = new File (path + "/savedFile.txt");
-
-
-         ;
-
-
-String dd[]={"a"};
-        Save (file, dd);
-    }
-
-    /*public void buttonLoad (View view)
-    {
-        File file = new File (path + "/savedFile.txt");
-        String [] loadText = Load(file);
-
-        String finalString = "";
-
-        for (int i = 0; i < loadText.length; i++)
-        {
-            finalString += loadText[i] + System.getProperty("line.separator");
-        }
-
-        textView.setText(finalString);
-
-    }*/
-    public static void Save(File file, String[] data) {
+    public static void SaveRoutesHelper(File file, String data) {//save_routes
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
@@ -60,9 +37,49 @@ String dd[]={"a"};
         }
         try {
             try {
-                for (int i = 0; i < data.length; i++) {
-                    fos.write(data[i].getBytes());
-                    if (i < data.length - 1) {
+                if (fos != null) {
+                    // String p=data.get(i).toStringForSaveInFile();
+                    fos.write(data.getBytes());
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void SavePlaces(ArrayList<Place> resultList)
+    {
+        File dir = new File(path);
+        dir.mkdirs();
+        File file = new File (path + "/savedPlacesFile.txt");
+        Save (file, resultList);
+    }
+
+
+    public static void Save(File file, ArrayList<Place> data) {//save places
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            try {
+
+                for (int i = 0; i < data.size(); i++) {
+                    if (fos != null) {
+                        String p=data.get(i).toStringForSaveInFile();
+                        fos.write(p.getBytes());
+
+                    }
+                    if (i < data.size() - 1) {
                         fos.write("\n".getBytes());
                     }
                 }
@@ -77,14 +94,61 @@ String dd[]={"a"};
             }
         }
     }
+//*** fuctions that load routes and places from files
 
+    public ArrayList<Place> LoadPlacesList(){
+        File file = new File (path + "/savedPlacesFile.txt");
+        String [] loadText = Load(file);
+
+        String PlaceString = "";
+        ArrayList<Place> resultList= new ArrayList<>();
+
+        for (int i = 0; i < loadText.length; i++)
+        {
+            PlaceString = loadText[i];
+            String [] Place = PlaceString.split("!");
+            //category+","+name+","+Strlat+","+Strlng+","+rating+","+"true"
+
+            Place placeObj=new Place();
+            placeObj.category=Place[0];
+            placeObj.name=Place[1];
+            placeObj.Strlat=Place[2];
+            placeObj.Strlng=Place[3];
+            placeObj.rating= Double.parseDouble(Place[4]);
+            if(Place[5].equals("true")) {
+                placeObj.isInWayPoint = true;
+            }
+            else
+                placeObj.isInWayPoint= false;
+            placeObj.lat= Double.parseDouble(Place[2]);
+            placeObj.lng= Double.parseDouble(Place[3]);
+
+            resultList.add(placeObj);
+
+
+        }
+        return resultList;
+
+
+
+    }
+
+    public  String[] LoadRoutes( ){
+
+        File file = new File (path + "/savedRoute.txt");
+        String [] loadText = Load(file);
+         return loadText;
+
+
+
+    }
 
     public static String[] Load(File file) {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return null;
         }
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr);
@@ -96,13 +160,13 @@ String dd[]={"a"};
                 anzahl++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
 
         try {
             fis.getChannel().position(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
 
         String[] array = new String[anzahl];
@@ -115,7 +179,7 @@ String dd[]={"a"};
                 i++;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
         return array;
     }

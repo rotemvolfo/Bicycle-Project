@@ -1,36 +1,22 @@
 package com.example.inbar.bicycle_client;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import java.io.FileOutputStream;
-import com.example.inbar.bicycle_client.Place;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import org.json.*;
-import android.content.Context;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import org.json.*;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.ParseException;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
@@ -44,12 +30,12 @@ public class PlacesManager extends Application {
     URIBuilder builder;
     HttpClient client = new DefaultHttpClient();
     ArrayList<Place> resultList;
-    public static Context context;
+   // public static Context context;
 
 
     @Override public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+       // context = getApplicationContext();
     }
     public ArrayList<Place> LoadLocations(String types, double lng, double lat, GoogleMap mMap, LatLng stationPosition1) throws ParseException, IOException, URISyntaxException, ExecutionException, InterruptedException {
 
@@ -70,25 +56,28 @@ public class PlacesManager extends Application {
         Collections.sort(resultList,Place::compareTo);
 
         ChoosePlacesForTheUserRoute(resultList,lat,lng,mMap, stationPosition1);
-        //SavePlacesListInFile();
+        SavePlacesListInFile(resultList);
         return resultList;
     }
 
-    public void SavePlacesListInFile() throws IOException {
+    public ArrayList<Place> LoadPlacesListFromFile() throws IOException {
 
 
         FilesService file=new FilesService();
-        file.buttonSave();
+        ArrayList<Place> resultList= file.LoadPlacesList();
+        return resultList;
 
 
 
-/*        FileWriter FileWriter = new FileWriter(File, false); // true to append
-        // false to overwrite.
-        for (Place place:resultList)
-        {
-            FileWriter.write(place.toString());//overwrite the toString function
+    }
+    public void SavePlacesListInFile(ArrayList<Place> resultList) throws IOException {
 
-        }*/
+
+        FilesService file=new FilesService();
+        file.SavePlaces(resultList);
+
+
+
 
     }
 
@@ -96,7 +85,7 @@ public class PlacesManager extends Application {
 
 
         try {
-            String status = new DirectionsRequests(resultList, lat, lng,mMap,stationPosition1).execute().get();
+            String status = new DirectionsRequests(resultList, lat, lng,mMap,stationPosition1,false).execute().get();
 
         } catch (InterruptedException e) {
             e.printStackTrace();

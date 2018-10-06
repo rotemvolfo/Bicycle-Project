@@ -20,4 +20,11 @@ public class Main extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    public void PreviousTrak_onClick(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);//// here load the layer on map of the locations ( tel ofan)
+        intent.putExtra("userOptions","Previous_track");
+        finish();
+        startActivity(intent);
+    }
 }
