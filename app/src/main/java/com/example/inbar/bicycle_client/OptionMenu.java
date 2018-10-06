@@ -24,7 +24,7 @@ public class OptionMenu extends AppCompatActivity {
         if(checkBox.isChecked()){
             userOptions += "museum,art_gallery,";
         }
-          checkBox = (CheckBox) findViewById(R.id.checkBox_Museums);
+          checkBox = (CheckBox) findViewById(R.id.checkBox_Spa);
         if(checkBox.isChecked()){
             userOptions += "Spa,";
         }
