@@ -57,7 +57,12 @@ public class OptionMenu extends AppCompatActivity {
     }
 
     public void Previous_track_clicked(View view) {
+        //String userOptions = new String();
 
+        Intent intent = new Intent(this, MapsActivity.class);//// here load the layer on map of the locations ( tel ofan)
+        intent.putExtra("userOptions","Previous_track");
+        finish();
+        startActivity(intent);
 
 
 

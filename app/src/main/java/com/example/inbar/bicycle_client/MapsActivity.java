@@ -120,10 +120,11 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         mMap = googleMap;
         LatLng stationPosition1=null;
         String detailsStation="";
+        ArrayList<Place> placesArrayList=null;
 
-        //get user location from gps
+
+        placesManager = new PlacesManager();
         Location userLocation = getCurrentLocationOfUser();
-         placesManager = new PlacesManager();
 
         try { //   return the Tel Ofan stastion
             stationsList = stationsActivity.getStationsList(Double.toString(userLocation.getLongitude()),Double.toString(userLocation.getLatitude()));
@@ -134,15 +135,28 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
                  detailsStation = String.format("Address: %s, Bicycles Available: %s", stationsList.get(0).getAddress(),stationsList.get(0).getNumOfBicyclesAvailable());
 
             }
-
-            ArrayList<Place> placesArrayList = placesManager.LoadLocations(getIntent().getStringExtra("userOptions"),userLocation.getLongitude(),userLocation.getLatitude(),mMap,stationPosition1);
-
-
-        // show the tel ofan stations on the map
+            //
+            String userMenuSelection=getIntent().getStringExtra("userOptions");
+            if (userMenuSelection.equals("Previous_track"))  {//load Places from file
+                try {
+                    boolean loadDirectionFromFile=true;
+                    placesArrayList= placesManager.LoadPlacesListFromFile() ;
+                    //load the routes from file
+                    String status = new DirectionsRequests(placesArrayList, userLocation.getLongitude(), userLocation.getLatitude(),mMap,stationPosition1,loadDirectionFromFile).execute().get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else//new api request to Google_placesApi
+            {
+                placesArrayList = placesManager.LoadLocations(getIntent().getStringExtra("userOptions"), userLocation.getLongitude(), userLocation.getLatitude(), mMap, stationPosition1);
+            }
+            // show the tel ofan stations on the map
         mMap.addMarker(new MarkerOptions().position(stationPosition1).title(stationsList.get(0).getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.bi)).snippet(detailsStation));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(stationPosition1));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
 
+        //  mark the user location on the map
         LatLng yourLocation = new LatLng( userLocation.getLatitude(),userLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(yourLocation).title("Your Location"));
 
@@ -179,7 +193,6 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void onInfoWindowClick(Marker marker) {

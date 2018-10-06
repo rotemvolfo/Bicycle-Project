@@ -17,14 +17,22 @@ public class Place implements Comparable<Place> {
         return Double.compare(o.rating, this.rating);
 
     }
+    public String toStringForSaveInFile(){
+        String data;
+        if(isInWayPoint)
+            data=category+"!"+name+"!"+Strlat+"!"+Strlng+"!"+rating+"!"+"true";
+        else
+            data=category+"!"+name+"!"+Strlat+"!"+Strlng+"!"+rating+"!"+"false";
+        return data;
 
+    }
     @Override
     public String toString() {
         String data;
         if(isInWayPoint)
-          data=category+","+name+","+Strlat+","+Strlng+","+rating+"true";
+          data=category+","+name+","+Strlat+","+Strlng+","+rating+","+"true";
         else
-            data=category+","+name+","+Strlat+","+Strlng+","+rating+"false";
+            data=category+","+name+","+Strlat+","+Strlng+","+rating+","+"false";
         return data;
 
     }
