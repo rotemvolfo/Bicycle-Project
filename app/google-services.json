@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "1001903099704",
+    "firebase_url": "https://myproj-a99c9.firebaseio.com",
+    "project_id": "myproj-a99c9",
+    "storage_bucket": "myproj-a99c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001903099704:android:eb34ad126084ac43",
+        "android_client_info": {
+          "package_name": "com.example.inbar.bicycle_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001903099704-0n2fo3t71c2d1qrft3u8sescjr0shh7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.inbar.bicycle_client",
+            "certificate_hash": "2aa2996e4f0f8e2e79c8e7046362c38d64152d23"
+          }
+        },
+        {
+          "client_id": "1001903099704-67bjlaoiq18ge87kcjpac0jpounkogq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM8fIV4mj_arjhrabA6BqvEh9OX-t6HD0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001903099704-67bjlaoiq18ge87kcjpac0jpounkogq5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001903099704:android:731112dea25a93f3",
+        "android_client_info": {
+          "package_name": "com.example.inbar.server_bicycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001903099704-67bjlaoiq18ge87kcjpac0jpounkogq5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM8fIV4mj_arjhrabA6BqvEh9OX-t6HD0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

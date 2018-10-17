@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".OptionMenu">
 
     <RelativeLayout
@@ -11,7 +12,8 @@
         android:layout_width="354dp"
         android:layout_height="594dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="15dp">
+        tools:layout_editor_absoluteX="15dp"
+        tools:ignore="MissingConstraints">
 
 
         <CheckBox
@@ -25,30 +27,14 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:scaleX="1"
             android:scaleY="1"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:text="Spa"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="20sp"
             android:textStyle="italic"
             tools:layout_editor_absoluteX="45dp"
             tools:layout_editor_absoluteY="153dp" />
-
-        <Button
-            android:id="@+id/button_PreviousTrack"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="220dp"
-            android:layout_height="21dp"
-
-            android:layout_alignEnd="@+id/checkBox_Museums"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="23dp"
-            android:background="#a0d4fa"
-            android:onClick="Previous_track_clicked"
-            android:text="Previous track "
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textSize="30sp"
-            android:visibility="invisible"
-            tools:layout_editor_absoluteX="131dp"
-            tools:layout_editor_absoluteY="363dp" />
 
         <CheckBox
             android:id="@+id/checkBox_restaurant"
@@ -64,6 +50,8 @@
             android:scaleY="1"
             android:text="Restaurants and Cafe"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:textSize="20sp"
             android:textStyle="italic"
             tools:layout_editor_absoluteX="45dp"
@@ -84,6 +72,8 @@
             android:text="Bars"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="20sp"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:textStyle="italic"
             tools:layout_editor_absoluteX="45dp"
             tools:layout_editor_absoluteY="153dp" />
@@ -99,6 +89,8 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:scaleX="1"
             android:scaleY="1"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:text="Movie Theaters"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="20sp"
@@ -114,6 +106,8 @@
             android:layout_below="@+id/checkBox_movie"
             android:layout_marginLeft="10dp"
             android:drawablePadding="30dp"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:padding="@dimen/activity_horizontal_margin"
             android:scaleX="1"
             android:scaleY="1"
@@ -130,6 +124,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textColor="@android:color/background_light"
+            android:buttonTint="#75a6fb"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="123dp"
             android:drawablePadding="30dp"
@@ -145,32 +141,33 @@
 
         <Button
             android:id="@+id/button_start"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="220dp"
+            android:layout_width="114dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/button_PreviousTrack"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="55dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="41dp"
             android:background="#75a6fb"
             android:onClick="Start_Clicked"
             android:text="Start"
+            android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@android:color/background_light"
             android:textSize="30sp"
+            android:textStyle="bold"
             android:visibility="visible"
             tools:layout_editor_absoluteX="131dp"
             tools:layout_editor_absoluteY="363dp" />
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="210dp"
+            android:layout_width="294dp"
             android:layout_height="49dp"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/checkBox_Spa"
-            android:layout_marginTop="87dp"
-            android:autoText="false"
-            android:text="Choose your route!"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textSize="22sp"
-            android:textStyle="italic" />
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/background_light"
+            android:text="Choose your route:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Tooltip"
+            android:textSize="30sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
