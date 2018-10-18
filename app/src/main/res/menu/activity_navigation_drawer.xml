@@ -17,6 +17,14 @@
             android:id="@+id/new_route"
             android:icon="@drawable/map"
             android:title="Find a new route" />
+        <item
+            android:id="@+id/delete_place"
+            android:icon="@drawable/ic_close_black_24dp"
+            android:title="Delete place from map" />
+        <item
+            android:id="@+id/add_place_to_route"
+            android:icon="@drawable/add"
+            android:title="Add place to your route" />
     </group>
 
 </menu>

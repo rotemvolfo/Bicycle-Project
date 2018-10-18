@@ -44,15 +44,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static android.location.LocationManager.GPS_PROVIDER;
 
 public class MapsActivity extends FragmentActivity  implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener{
 
@@ -65,6 +62,9 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
     private DrawerLayout mDrawerLayout;
     private NavigationView nv;
     private LatLng currentMarkLocation;
+    private boolean isDeleteMode =false;
+    private boolean isAddMode =false;
+
 
     private FloatingActionMenu fam;
     private FloatingActionButton fabReadTips, fabAddTip;
@@ -185,14 +185,14 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
                 detailsStation = String.format("Address: %s, Bicycles Available: %s", stationsList.get(0).getAddress(), stationsList.get(0).getNumOfBicyclesAvailable());
 
             }
-            //
+
             String userMenuSelection=getIntent().getStringExtra("userOptions");
             if (userMenuSelection.equals("Previous_track"))  {//load Places from file
                 try {
                     boolean loadDirectionFromFile=true;
                     placesArrayList= placesManager.LoadPlacesListFromFile() ;
                     //load the routes from file
-                    String status = new DirectionsRequests(placesArrayList, userLocation.getLongitude(), userLocation.getLatitude(),mMap,stationPosition1,loadDirectionFromFile).execute().get();
+                    String status = new DirectionsRequests(placesArrayList, userLocation.getLongitude(), userLocation.getLatitude(),mMap,stationPosition1,loadDirectionFromFile,false).execute().get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -212,28 +212,35 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
 
         HashMap placesOnRoute = new HashMap<LatLng,Place>();
 
-
-        for (Place place: placesArrayList) {//present places  icons on the map
-            LatLng position = new LatLng(place.lat,place.lng );
-            if(place.isInWayPoint==true){
-                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                placesOnRoute.put(position,place);
-            }else {
-                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-            }
-        }
+        markAllPlacesOnMap(placesArrayList, placesOnRoute);
 
         mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            ArrayList<Place> finalPlacesArrayList = placesArrayList;
+            LatLng finalStationPosition = stationPosition1;
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 marker.showInfoWindow();
-                if(placesOnRoute.containsKey(marker.getPosition()))
-                {
+                if (isDeleteMode) {
+                    marker.remove();
+                    isDeleteMode = false;
+                    showToast("The place " + marker.getTitle() + " is deleted");
+                    //if user removed place from the route should redraw the route
+                    if(placesOnRoute.containsKey(marker.getPosition())) {
+                        placesOnRoute.remove(marker.getPosition());
+                        updateMapAccordingChanges(finalPlacesArrayList,placesOnRoute,userLocation,finalStationPosition,marker.getTitle(),false);
+                    }
+                }else if(placesOnRoute.containsKey(marker.getPosition())) {
                     currentMarkLocation = marker.getPosition();
                     fam.open(true);
-                }
-                else{
+                    if(isAddMode) //If the user has clicked to add a place that is already part of the route
+                        showToast("This place is already on your route, choose another place");
+                }else if(isAddMode){ //If the user has clicked to add a new place to the route
+                    isAddMode = false;
+                    showToast("The place " + marker.getTitle() + " added to your route");
+                    updateMapAccordingChanges(finalPlacesArrayList,placesOnRoute,userLocation,finalStationPosition,marker.getTitle(),true);
+
+                } else{
                     currentMarkLocation = null;
                 }
                 return false;
@@ -250,6 +257,52 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         }
     }
 
+    // The function update the map and the route due to the action that was (add place or delete place).
+    // Drawing and recalculating the route according to the changes.
+    private void updateMapAccordingChanges(ArrayList<Place> placesArrayList, HashMap<LatLng,Place> placesOnRoute , Location userLocation, LatLng stationPosition, String placeName, boolean isNewPlaceToAdd){
+
+        Place newPlaceToAddToRoute = placesManager.getPlaceByName(placesArrayList,placeName);
+        newPlaceToAddToRoute.isInWayPoint = isNewPlaceToAdd;
+        // add place to route if needed
+        if(isNewPlaceToAdd) {
+            placesOnRoute.put(newPlaceToAddToRoute.getPosition(), newPlaceToAddToRoute);
+        }
+
+        DirectionsRequests directionsRequests = new DirectionsRequests(placesArrayList, userLocation.getLatitude(), userLocation.getLongitude(),mMap, stationPosition,false,true);
+        directionsRequests.set_choosenPlacesList(new ArrayList<Place>(placesOnRoute.values()));
+        directionsRequests.execute();
+        mMap.clear();
+        markAllPositionsOnMap(placesArrayList,placesOnRoute,userLocation);
+    }
+
+    //The function marks all positions- places, station of tel-ofun and user location on the maps
+    private void markAllPositionsOnMap(ArrayList<Place> placesArrayList, HashMap<LatLng,Place> placesOnRoute , Location userLocation) {
+        try {
+            //mark all places
+            markAllPlacesOnMap(placesArrayList,placesOnRoute);
+            //mark the station of tel-Ofun on the map by the current user location
+            markTelOfunStationByCurrentLocationOnMap(false);
+            //mark current user location
+            LatLng yourLocation = new LatLng( userLocation.getLatitude(),userLocation.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(yourLocation).title("Your Location"));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void markAllPlacesOnMap(ArrayList<Place> placesArrayList, HashMap<LatLng,Place> placesOnRoute){
+        for (Place place : placesArrayList) {//present places  icons on the map
+            LatLng position = new LatLng(place.lat, place.lng);
+            if (place.isInWayPoint == true) {
+                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                placesOnRoute.put(position, place);
+            } else {
+                mMap.addMarker(new MarkerOptions().position(position).title(place.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
+        }
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
@@ -332,6 +385,12 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
                     mDrawerLayout.closeDrawers();
                     finish();
                     return true;
+                } else if (selectedItem.equals("Delete place from map")) {
+                    showToast("Click the place that you want to delete");
+                    isDeleteMode = true;
+                }else if (selectedItem.equals("Add place to your route")) {
+                    showToast("Click the place that you want to add to your route");
+                    isAddMode = true;
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
@@ -368,6 +427,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         };
     }
 
+    //The function gets all tips from server by specific place location and previews them in list view
     private void getTips(){
         try {
             String response = tipsManager.getAllTipsToSpecificPlace(Double.toString(currentMarkLocation.latitude),Double.toString(currentMarkLocation.longitude));
@@ -396,7 +456,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
                         TipObject selectedItem = (TipObject) parent.getItemAtPosition(position);
                         TextView textView = findViewById(R.id.textView_contentTip);
 
-                        // Display the selected item text on TextView
+                        // Display the selected item context text of tip on TextView
                         textView.setText(selectedItem.getContent());
                     }
                 });
@@ -414,6 +474,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    //The function clears the text and changes the view of adding a tip to the invisible
     public void buttonClose_onClick(View view) {
         ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout_addTip);
         constraintLayout.setVisibility(View.INVISIBLE);
@@ -425,6 +486,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         editText.setText("");
     }
 
+    //The function sends to the server a new tip added by the user
     public void buttonSend_onClick(View view) throws ExecutionException, InterruptedException, JSONException {
         EditText editTextContent = findViewById(R.id.editTextAddTip);
         String newOpinionToAdd = editTextContent.getText().toString();
@@ -432,6 +494,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         String userName = editTextUserName.getText().toString();
         EditText editTextTitle = findViewById(R.id.editTextTitle);
         String title= editTextTitle.getText().toString();
+        //if user missing params
         if(userName.isEmpty() || newOpinionToAdd.isEmpty() || title.isEmpty()){
             showToast("Name or Content is empty.\n Please complete what is missing and try again.");
         }
@@ -441,7 +504,7 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
                 editTextContent.setText("");
                 editTextUserName.setText("");
                 editTextTitle.setText("");
-                showToast("Your Opinion Send!");
+                showToast("Your Tip Send!");
             } catch (Exception e) {
                 showErrorMessage();
             }
@@ -452,12 +515,13 @@ public class MapsActivity extends FragmentActivity  implements OnMapReadyCallbac
         showToast("There is some problem, please try again.");
     }
 
+    //The function clears the content text and changes the view of get tips to invisible
     public void buttonExit_onClick(View view) {
         ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout_getTips);
         constraintLayout.setVisibility(View.INVISIBLE);
         TextView textView = findViewById(R.id.textView_contentTip);
         textView.setText("");
         ListView listView = findViewById(R.id.list_view);
-        listView.setAdapter(null);
+        listView.setAdapter(null); //clean the list view
     }
 }

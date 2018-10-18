@@ -2,6 +2,8 @@ package com.example.inbar.bicycle_client;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Place implements Comparable<Place> {
 
     String category;
@@ -35,5 +37,9 @@ public class Place implements Comparable<Place> {
             data=category+","+name+","+Strlat+","+Strlng+","+rating+","+"false";
         return data;
 
+    }
+
+    public LatLng getPosition(){
+        return new LatLng(this.lat,this.lng);
     }
 }

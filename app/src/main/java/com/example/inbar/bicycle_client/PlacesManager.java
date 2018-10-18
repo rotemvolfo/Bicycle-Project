@@ -70,6 +70,7 @@ public class PlacesManager extends Application {
 
 
     }
+
     public void SavePlacesListInFile(ArrayList<Place> resultList) throws IOException {
 
 
@@ -81,11 +82,19 @@ public class PlacesManager extends Application {
 
     }
 
+    public Place getPlaceByName(ArrayList<Place> allPlaces, String namePlace){
+        for (Place place: allPlaces){
+            if(place.name.equals(namePlace))
+                return place;
+        }
+        return null;
+    }
+
     private void ChoosePlacesForTheUserRoute(ArrayList<Place> resultList, double lat, double lng, GoogleMap mMap, LatLng stationPosition1) throws ExecutionException, InterruptedException {
 
 
         try {
-            String status = new DirectionsRequests(resultList, lat, lng,mMap,stationPosition1,false).execute().get();
+            String status = new DirectionsRequests(resultList, lat, lng,mMap,stationPosition1,false,false).execute().get();
 
         } catch (InterruptedException e) {
             e.printStackTrace();

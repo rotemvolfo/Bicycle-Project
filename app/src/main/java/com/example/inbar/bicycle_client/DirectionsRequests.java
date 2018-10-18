@@ -35,19 +35,20 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class DirectionsRequests extends AsyncTask<String, Object, String> {
 
     private String _Key = "AIzaSyAK4YCms8YltWWh_beAVXDylQw-GCW55_s";
-    URIBuilder _builder;// = new URIBuilder().setScheme("https").setHost("maps.googleapis.com").setPath("/maps/api/directions/json");
-    HttpClient _client = new DefaultHttpClient();
-    ArrayList<Place> _resultList;
-    GoogleMap _mMap;
-    double _Userlat, _Userlng;//user potion x;y
-    String _retSrc;
-    LatLng _stationPosition1;
-    Map<String, List<Place>> _placesDictionary;
-    int _placesTotalNumber = 0;
-    List<Place> _choosenPlacesList = new ArrayList<Place>();
-    boolean _isLoadFromfile;
+    private URIBuilder _builder;// = new URIBuilder().setScheme("https").setHost("maps.googleapis.com").setPath("/maps/api/directions/json");
+    private HttpClient _client = new DefaultHttpClient();
+    private ArrayList<Place> _resultList;
+    private GoogleMap _mMap;
+    private double _Userlat, _Userlng;//user potion x;y
+    private String _retSrc;
+    private LatLng _stationPosition1;
+    private Map<String, List<Place>> _placesDictionary;
+    private int _placesTotalNumber = 0;
+    private List<Place> _choosenPlacesList = new ArrayList<Place>();
+    private boolean _isLoadFromfile;
+    private boolean _isTheRouteChanged;
 
-    public DirectionsRequests(ArrayList<Place> resultList, double lat, double lng, GoogleMap mMap, LatLng stationPosition1, boolean isLoadFromFile) {
+    public DirectionsRequests(ArrayList<Place> resultList, double lat, double lng, GoogleMap mMap, LatLng stationPosition1, boolean isLoadFromFile, boolean isTheRouteChanged) {
 
         _placesTotalNumber = resultList.size();
         _resultList = resultList;
@@ -56,7 +57,11 @@ public class DirectionsRequests extends AsyncTask<String, Object, String> {
         _mMap = mMap;
         _stationPosition1 = stationPosition1;
         _isLoadFromfile = isLoadFromFile;
+        _isTheRouteChanged = isTheRouteChanged;
+    }
 
+    public void set_choosenPlacesList(List<Place> _choosenPlacesList) {
+        this._choosenPlacesList = _choosenPlacesList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -155,35 +160,35 @@ public class DirectionsRequests extends AsyncTask<String, Object, String> {
     private String BuildWayPointsAtrribute() {
 
         StringBuilder wayPointStr = new StringBuilder();
-
-        SortLocationDictionaryByCategory();
-        int categoryNmber = _placesDictionary.size();
-
-        int placesInRoute = 0;
-        int attemps = 0;
-        while (placesInRoute < 5 && attemps < 5) {
-
-            for (Map.Entry<String, List<Place>> entry : _placesDictionary.entrySet()) {
-                List<Place> places = entry.getValue();
-                Collections.sort(places, Place::compareTo);//sort by rating
-                if (placesInRoute < 5) {
-
-
-                    if (places.size() > 0) {
-
-                        wayPointStr = wayPointStr.append("|" + places.get(0).lat + "," + places.get(0).lng);
-                        _choosenPlacesList.add(places.get(0));
-                        places.get(0).isInWayPoint = true;
-                        placesInRoute++;
-                        places.remove(0);
-                    }
-                    if (places.size() == 0) {
-
-                    }
-
-                }
+        if(_isTheRouteChanged){
+            for (Place place:_choosenPlacesList) {
+                wayPointStr = wayPointStr.append("|" + place.lat + "," + place.lng);
             }
-            attemps++;
+        }else {
+            SortLocationDictionaryByCategory();
+
+            int placesInRoute = 0;
+            int attemps = 0;
+            while (placesInRoute < 5 && attemps < 5) {
+
+                for (Map.Entry<String, List<Place>> entry : _placesDictionary.entrySet()) {
+                    List<Place> places = entry.getValue();
+                    Collections.sort(places, Place::compareTo);//sort by rating
+                    if (placesInRoute < 5) {
+
+
+                        if (places.size() > 0) {
+
+                            wayPointStr = wayPointStr.append("|" + places.get(0).lat + "," + places.get(0).lng);
+                            _choosenPlacesList.add(places.get(0));
+                            places.get(0).isInWayPoint = true;
+                            placesInRoute++;
+                            places.remove(0);
+                        }
+                    }
+                }
+                attemps++;
+            }
         }
         return wayPointStr.toString();
     }
