@@ -10,8 +10,8 @@ using “FireBase” as server and database to present the user’s recommendati
 Saving and loading the  previous route when the user closes the app .
 Recalculate a route after deleting /adding a specific location 
 
-Link to the project : 
-https://github.com/noamshafran/Bicycle-Project
+ 
+  
 
 Main folder : 
 https://github.com/noamshafran/Bicycle-Project/tree/master/app/src/main/java/com/example/inbar/bicycle_client
