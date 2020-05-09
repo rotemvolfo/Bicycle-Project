@@ -1,4 +1,4 @@
-# Bicycle-Project
+# Bicycle-Project - android app
 
 Present the closest “Tel-O-fun” station , with available bikes .
 Build a cycling route with 5-6 points to visit in Tel Aviv
